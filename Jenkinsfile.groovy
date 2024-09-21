@@ -38,6 +38,7 @@ pipeline {
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
                                 echo "base_dir=\$base_dir"
                                 cd \$base_dir
+                                docker compose down
                                 docker compose up -d
                         """
                     }
