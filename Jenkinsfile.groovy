@@ -27,18 +27,22 @@ pipeline {
 
         stage('Build Image And Deploy') {
             steps {
-                sshagent(['jenkins']) {
-                    sh """
-                        jenkins_dir=\$(realpath --relative-to=/var/jenkins_home \$(pwd))
-                        echo "jenkins_dir=\$jenkins_dir"
-                        ssh root@192.168.31.114 << 'EOF'
-                            base_dir=/etc/config/jenkins/jenkins_home/${jenkins_dir}
-                            echo "base_dir=\$base_dir"
-                            cd \$base_dir
-                            docker buildx build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} .
-                            docker compose up -d
-                        EOF
-                    """
+                script {
+                    // Calculate the Jenkins directory path
+                    def jenkinsDir = sh(script: 'realpath --relative-to=/var/jenkins_home $(pwd)', returnStdout: true).trim()
+
+                    // Use sshagent to manage the SSH connection and execute the commands
+                    sshagent(['jenkins']) {
+                        sh """
+                            ssh root@192.168.31.114 << EOF
+                                base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
+                                echo "base_dir=\$base_dir"
+                                cd \$base_dir
+                                docker buildx build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} .
+                                docker compose up -d
+                            EOF
+                        """
+                    }
                 }
             }
         }
