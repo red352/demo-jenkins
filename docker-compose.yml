@@ -1,9 +1,10 @@
 version: '3.8'
 services:
-  test:
-    container_name: test
+  app:
+    container_name: test-jenkins
     build:
       dockerfile: Dockerfile
+    image: test-jenkins:latest
     ports:
       - "8083:8080"
     restart: on-failure

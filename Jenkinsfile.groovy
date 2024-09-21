@@ -6,12 +6,6 @@ pipeline {
         jdk "jdk21"
     }
 
-    environment {
-        IMAGE_NAME = 'test'
-        IMAGE_TAG = 'latest'
-
-    }
-
     stages {
         stage('Build') {
             steps {
