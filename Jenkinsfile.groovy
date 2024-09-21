@@ -38,7 +38,6 @@ pipeline {
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
                                 echo "base_dir=\$base_dir"
                                 cd \$base_dir
-                                docker buildx build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} .
                                 docker compose up -d
                             EOF
                         """
