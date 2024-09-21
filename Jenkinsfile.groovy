@@ -50,7 +50,7 @@ pipeline {
                     emailext(
                             subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                             body: "The job ${env.JOB_NAME} has completed successfully.",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                            recipientProviders: [developers(), requestor()],
                             to: "${env.RECIPIENTS}"
                     )
                 }
@@ -58,8 +58,8 @@ pipeline {
                     emailext(
                             subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                             body: "The job ${env.JOB_NAME} has failed. Check console output for details: ${env.BUILD_URL}",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                            to: "${env.RECIPIENTS}"
+                            recipientProviders: [developers(), requestor()],
+                            to: [requestor()]
                     )
                 }
             }
