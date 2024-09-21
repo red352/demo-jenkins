@@ -39,7 +39,6 @@ pipeline {
                                 echo "base_dir=\$base_dir"
                                 cd \$base_dir
                                 docker compose up -d
-                            EOF
                         """
                     }
                 }
