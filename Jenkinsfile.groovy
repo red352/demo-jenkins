@@ -38,6 +38,9 @@ pipeline {
                             ssh root@192.168.31.114 << 'EOF'
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
                                 echo "base_dir=\$base_dir"
+                                echo "https_proxy=\$https_proxy"
+                                echo "http_proxy=\\http_proxy"
+                                systemctl show-environment
                                 cd \$base_dir
                                 docker compose down
                                 docker compose up -d
@@ -48,8 +51,10 @@ pipeline {
 
             post {
                 always {
-                    emailext subject: "${DEFAULT_SUBJECT}",
-                            body: "${DEFAULT_CONTENT}",
+                    emailext subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!",
+                            body: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:\n" +
+                                    "\n" +
+                                    "Check console output at $BUILD_URL to view the results.",
                             recipientProviders: [developers(), requestor()]
                 }
             }
