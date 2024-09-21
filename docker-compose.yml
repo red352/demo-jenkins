@@ -2,6 +2,8 @@ version: '3.8'
 services:
   app:
     container_name: test
+    build:
+      dockerfile: Dockerfile
     image: test:latest
     ports:
       - "8083:8080"

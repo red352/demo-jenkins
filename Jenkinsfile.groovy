@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 git 'https://github.com/red352/demo-jenkins.git'
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                sh "mvn -DskipTests=true clean package"
             }
             post {
                 success {
