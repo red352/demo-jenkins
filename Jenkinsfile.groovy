@@ -7,6 +7,11 @@ pipeline {
         jdk "jdk21"
     }
 
+    environment {
+        IMAGE_NAME = 'test'
+        IMAGE_TAG = 'latest'
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -26,6 +31,23 @@ pipeline {
                 success {
                     junit '**/target/surefire-reports/TEST-*.xml'
                     archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+
+        stage('Build Image And Deploy') {
+            steps {
+                sshagent(['jenkins']) {
+                    sh """
+                        jenkins_dir=\$(realpath --relative-to=/var/jenkins_home \$(pwd))
+                        ssh root@192.168.31.114 << EOF
+                            base_dir=/etc/config/jenkins/jenkins_home/\${jenkins_dir} &&
+                            cd \$base_dir &&
+                            docker buildx build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} . &&
+                            docker compose up -d 
+                        EOF
+                    """
+
                 }
             }
         }
