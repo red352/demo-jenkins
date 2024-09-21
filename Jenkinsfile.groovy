@@ -30,11 +30,11 @@ pipeline {
                 script {
                     // Calculate the Jenkins directory path
                     def jenkinsDir = sh(script: 'realpath --relative-to=/var/jenkins_home $(pwd)', returnStdout: true).trim()
-
+                    println "jenkinsDir=${jenkinsDir}"
                     // Use sshagent to manage the SSH connection and execute the commands
                     sshagent(['jenkins']) {
                         sh """
-                            ssh root@192.168.31.114 << EOF
+                            ssh root@192.168.31.114 << 'EOF'
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
                                 echo "base_dir=\$base_dir"
                                 cd \$base_dir
