@@ -38,6 +38,7 @@ pipeline {
                             ssh root@192.168.31.114 << 'EOF'
                                 source ~/.bashrc
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
+                                echo "base_dir=\\$PATH"
                                 echo "base_dir=\$base_dir"
                                 echo "https_proxy=\$https_proxy"
                                 echo "http_proxy=\$http_proxy"
@@ -51,9 +52,16 @@ pipeline {
             }
 
             post {
-                always {
-                    emailext subject: "${env.PROJECT_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}!",
-                            body: "${env.PROJECT_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}:\n" +
+                success {
+                    emailext subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - successful!",
+                            body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}:\n" +
+                                    "\n" +
+                                    "Check console output at ${env.BUILD_URL} to view the results.",
+                            recipientProviders: [developers(), requestor()]
+                }
+                failure {
+                    emailext subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - failed!",
+                            body: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}:\n" +
                                     "\n" +
                                     "Check console output at ${env.BUILD_URL} to view the results.",
                             recipientProviders: [developers(), requestor()]
