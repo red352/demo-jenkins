@@ -47,20 +47,18 @@ pipeline {
 
             post {
                 success {
-                    emailext(
-                            subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                    emailext subject: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                             body: "The job ${env.JOB_NAME} has completed successfully.",
                             recipientProviders: [developers(), requestor()],
-                            to: "${env.RECIPIENTS}"
-                    )
+                            to: requestor()
+
                 }
                 failure {
-                    emailext(
-                            subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                    emailext subject: "FAILURE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                             body: "The job ${env.JOB_NAME} has failed. Check console output for details: ${env.BUILD_URL}",
                             recipientProviders: [developers(), requestor()],
-                            to: [requestor()]
-                    )
+                            to: requestor()
+
                 }
             }
         }
