@@ -35,6 +35,7 @@ pipeline {
                                 echo "https_proxy=\$https_proxy"
                                 echo "http_proxy=\$http_proxy"
                                 cd \$base_dir
+                                docker compose build
                                 docker compose down
                                 docker compose up -d
                         """
