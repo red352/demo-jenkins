@@ -50,7 +50,7 @@ pipeline {
                 always {
                     emailext subject: "${DEFAULT_SUBJECT}",
                             body: "${DEFAULT_CONTENT}",
-                            recipientProviders: "[developers(), requestor()]"
+                            recipientProviders: [developers(), requestor()]
                 }
             }
         }
