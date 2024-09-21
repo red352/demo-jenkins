@@ -36,10 +36,11 @@ pipeline {
                     sshagent(['jenkins']) {
                         sh """
                             ssh root@192.168.31.114 << 'EOF'
+                                source ~/.bashrc
                                 base_dir=/etc/config/jenkins/jenkins_home/${jenkinsDir}
                                 echo "base_dir=\$base_dir"
                                 echo "https_proxy=\$https_proxy"
-                                echo "http_proxy=\\http_proxy"
+                                echo "http_proxy=\$http_proxy"
                                 systemctl show-environment
                                 cd \$base_dir
                                 docker compose down
@@ -51,10 +52,10 @@ pipeline {
 
             post {
                 always {
-                    emailext subject: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!",
-                            body: "$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:\n" +
+                    emailext subject: "${env.PROJECT_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}!",
+                            body: "${env.PROJECT_NAME} - Build # ${env.BUILD_NUMBER} - ${env.BUILD_STATUS}:\n" +
                                     "\n" +
-                                    "Check console output at $BUILD_URL to view the results.",
+                                    "Check console output at ${env.BUILD_URL} to view the results.",
                             recipientProviders: [developers(), requestor()]
                 }
             }
