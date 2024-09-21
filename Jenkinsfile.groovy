@@ -9,6 +9,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'test'
         IMAGE_TAG = 'latest'
+
     }
 
     stages {
