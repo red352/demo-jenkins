@@ -12,4 +12,4 @@ COPY ./target/*.jar ./app.jar
 EXPOSE 8080
 ENV JAVA_ENV=""
 # 运行应用程序
-CMD ["java", "${JAVA_ENV}" ,"-jar" ,"./app.jar"]
+CMD ["sh", "-c", "java $JAVA_ENV -jar ./app.jar"]
