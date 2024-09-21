@@ -46,11 +46,11 @@ pipeline {
                 }
             }
 
-            post {
-                emailext subject: ${DEFAULT_SUBJECT},
-                        body: ${DEFAULT_CONTENT},
-                        recipientProviders: [developers(), requestor()]
-            }
+//            post {
+//                emailext subject: ${DEFAULT_SUBJECT},
+//                        body: ${DEFAULT_CONTENT},
+//                        recipientProviders: [developers(), requestor()]
+//            }
         }
     }
 }
